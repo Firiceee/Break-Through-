@@ -13,14 +13,14 @@
 
 enum class shaderType
 {
-    PROGRAM, VERTEX, FRAGMENT
+    PROGRAM, VERTEX, FRAGMENT, GEOMETRY
 };
 
 std::string getStringFromFile(const std::string& filepath);
 class Shader
 {
 public:
-    Shader(const std::string& vertPath, const std::string& fragPath);
+    Shader(const std::string& vertPath, const std::string& fragPath, const std::string& geometryPath="");
     void Use();
     void Delete();
     void Unbind();

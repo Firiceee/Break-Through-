@@ -23,6 +23,8 @@ std::ostream& operator<<(std::ostream& out, shaderType type)
         return out << "FRAGMENT";
     case shaderType::VERTEX:
         return out << "VERTEX";
+    case shaderType::GEOMETRY:
+        return out << "GEOMETRY";
     }
 
     return out;
@@ -109,15 +111,22 @@ void Shader::SetVec4(const std::string& name, const glm::vec4& vec)
 }
 
 
-Shader::Shader(const std::string& vertPath, const std::string& fragPath)
+Shader::Shader(const std::string& vertPath, const std::string& fragPath, const std::string& geometryPath)
 {
     std::string vert;
     std::string frag;
+    std::string geometry;
+
+    bool containGeometryShader = !geometryPath.empty();
 
     try
     {
         vert = getStringFromFile(vertPath);
         frag = getStringFromFile(fragPath);
+        if (containGeometryShader)
+        {
+            geometry = getStringFromFile(geometryPath);
+        }
     }
     catch (...)
     {
@@ -138,15 +147,29 @@ Shader::Shader(const std::string& vertPath, const std::string& fragPath)
     ErrorHandling(fragShader, shaderType::FRAGMENT);
     ErrorHandling(vertShader, shaderType::VERTEX);
 
+    GLuint geometryShader{};
+    if (containGeometryShader)
+    {
+        const char* geometrySourceCode = geometry.c_str();
+        geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geometryShader, 1, &geometrySourceCode, nullptr);
+        glCompileShader(geometryShader);
+        ErrorHandling(geometryShader, shaderType::GEOMETRY);
+    }
+
     m_ID = glCreateProgram();
     glAttachShader(m_ID, vertShader);
     glAttachShader(m_ID, fragShader);
+    if (containGeometryShader)
+        glAttachShader(m_ID, geometryShader);
 
     glLinkProgram(m_ID);
     ErrorHandling(m_ID, shaderType::PROGRAM);
 
     glDeleteShader(fragShader);
     glDeleteShader(vertShader);
+    if (geometryShader)
+        glDeleteShader(geometryShader);
 }
 
 

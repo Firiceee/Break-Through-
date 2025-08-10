@@ -32,7 +32,7 @@ m_wrapS(wrapS), m_wrapT(wrapT), m_magFilter(magFilter), m_minFilter(minFilter)
 }
 
 
-Texture::~Texture()
+void Texture::Delete()
 {
     glDeleteTextures(1, &m_ID);
 }
