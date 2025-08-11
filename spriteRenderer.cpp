@@ -1,4 +1,5 @@
 #include "header/spriteRenderer.h"
+#include "header/constant.h"
 
 void SpriteRenderer::Draw(Texture& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
 {
@@ -23,10 +24,10 @@ void SpriteRenderer::Draw(Texture& texture, glm::vec2 position, glm::vec2 size, 
     model = glm::scale(model, scaleUp);
 
 
-    m_Shader.SetMat4("model", model);
+    m_Shader.SetMat4(Constant::Resource::MODEL_UNIFORM, model);
 
     //color
-    m_Shader.SetVec3("spriteColor", color);
+    m_Shader.SetVec3(Constant::Resource::SPRITE_COLOR_UNIFORM, color);
 
     // actual draw
     glBindVertexArray(m_VAO);

@@ -79,7 +79,8 @@ set(SOURCES
         resource_manager.cpp
         windowmanager.cpp
         spriteRenderer.cpp
-
+        gameobject.cpp
+        gamelevel.cpp
 )
 
 add_executable(breakThrough ${SOURCES})

@@ -42,7 +42,7 @@ Texture& ResourceManager::LoadTexture(const char* file, bool alpha, GLuint wrapS
     if (!data)
     {
         std::cerr << "Could not load the file " << file << std::endl;
-        throw std::runtime_error("Failed to load the file");
+        throw std::runtime_error("Failed to load the file in texture loading");
     }
     GLuint format = nummChan == 4 ? GL_RGBA : GL_RGB;
     tex.Generate(width, height, format, internalFormat, data);

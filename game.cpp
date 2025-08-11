@@ -1,4 +1,5 @@
 #include "header/game.h"
+#include "header/constant.h"
 
 
 SpriteRenderer  *Renderer;
@@ -21,9 +22,7 @@ void Game::Render()
 {
     glClearColor(1., 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
-    Renderer->Draw(ResourceManager::GetTexture("face"),
-        glm::vec2(200.0f, 200.0f),
-        glm::vec2(300.0f, 400.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    m_levels[m_currentLevel - 1].Draw(*Renderer);
     glfwSwapBuffers(windowManager.getWindow());
     glfwPollEvents();
 }
@@ -49,19 +48,42 @@ void Game::Init()
     // Set game pointer in window manager for callback access
     windowManager.setGamePointer(this);
     
+    // Set up size callback to avoid circular dependency
+    windowManager.setSizeCallback(Game::handleResize);
+    
     // load shaders
-    ResourceManager::LoadShader("resources/shader/def.vert", "resources/shader/def.frag", "", "sprite");
+    ResourceManager::LoadShader(Constant::Path::DEF_VERT, Constant::Path::DEF_FRAG, "", Constant::Resource::SPRITE_SHADER);
     // configure shaders
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_width),
         static_cast<float>(m_height), 0.0f, -1.0f, 1.0f);
 
-    ResourceManager::GetShader("sprite").Use().SetInt("tex", 0);
-    ResourceManager::GetShader("sprite").SetMat4("projection", projection);
+    ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER).Use().SetInt(Constant::Resource::TEX_UNIFORM, 0);
+    ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER).SetMat4(Constant::Resource::PROJECTION_UNIFORM, projection);
     // set render-specific controls
-    Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
+    Renderer = new SpriteRenderer(ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER));
     Renderer->initRenderData();
     // load textures
-    ResourceManager::LoadTexture("resources/texture/awesomeface.png", false,
+    ResourceManager::LoadTexture(Constant::Path::BLOCK_TEXTURE, false,
         GL_REPEAT, GL_REPEAT,
-        GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, "face");
+        GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, Constant::Resource::BRICK_TEXTURE);
+
+    ResourceManager::LoadTexture(Constant::Path::BLOCK_SOLID_TEXTURE, false,
+    GL_REPEAT, GL_REPEAT,
+    GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, Constant::Resource::SOLID_BRICK_TEXTURE);
+
+    m_levels.emplace_back(Constant::Path::LEVEL_1, m_width, m_height);
+
+}
+
+void Game::handleResize(int width, int height)
+{
+    // Get the game instance from the window user pointer
+    GLFWwindow* window = glfwGetCurrentContext();
+    if (window) {
+        void* gamePtr = glfwGetWindowUserPointer(window);
+        if (gamePtr) {
+            Game* game = static_cast<Game*>(gamePtr);
+            game->setSize(width, height);
+        }
+    }
 }

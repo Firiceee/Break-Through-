@@ -1,19 +1,17 @@
 #include "header/windowmanager.h"
 #include <iostream>
 
-// Forward declaration to avoid circular dependency
-class Game;
+// Global callback function that will be set by the window manager
+static SizeCallback g_sizeCallback = nullptr;
 
 void callBackSize(GLFWwindow* window, int width, int height)
 {
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
     
-    // Update game size if available
-    void* gamePtr = glfwGetWindowUserPointer(window);
-    if (gamePtr) {
-        Game* game = static_cast<Game*>(gamePtr);
-        game->setSize(width, height);
+    // Call the registered callback if available
+    if (g_sizeCallback) {
+        g_sizeCallback(width, height);
     }
 }
 
@@ -54,4 +52,10 @@ WindowManager::~WindowManager()
 void WindowManager::setGamePointer(void* gamePtr)
 {
     glfwSetWindowUserPointer(m_window, gamePtr);
+}
+
+void WindowManager::setSizeCallback(SizeCallback callback)
+{
+    m_sizeCallback = callback;
+    g_sizeCallback = callback; // Set the global callback
 }
