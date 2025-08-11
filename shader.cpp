@@ -36,6 +36,11 @@ void Shader::Delete()
     glDeleteProgram(m_ID);
 }
 
+Shader::~Shader()
+{
+    Delete();
+}
+
 void Shader::ErrorHandling(GLuint shader, shaderType type)
 {
     int success;
@@ -66,9 +71,10 @@ void Shader::Unbind()
 {
     glUseProgram(0);
 }
-void Shader::Use()
+Shader& Shader::Use()
 {
     glUseProgram(m_ID);
+    return *this;
 }
 void Shader::SetFloat(const std::string& name, GLfloat value)
 {

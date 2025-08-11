@@ -12,15 +12,15 @@ public:
         float rotate=0, glm::vec3 color={1.f, 1.f, 1.f});
     SpriteRenderer(Shader& shader);
     ~SpriteRenderer();
+    void initRenderData();
 
 private:
 
-    Shader m_Shader;
+    Shader& m_Shader;
     GLuint m_VAO{};
     GLuint m_VBO{};
     GLuint m_EBO{};
 
-    void initRenderData();
 };
 
 #endif

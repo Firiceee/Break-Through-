@@ -7,6 +7,7 @@ class Texture
 {
 public:
     Texture(GLuint wrapS, GLuint wrapT, GLuint magFilter, GLuint minFilter);
+    ~Texture();
     void Delete();
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;

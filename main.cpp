@@ -7,7 +7,8 @@
 
 int main()
 {
-    Game game{};
+    Game game{Constant::Screen::WIDTH, Constant::Screen::HEIGHT};
+    game.Init();
 
     GLfloat timer{};
     GLfloat deltatime{};
@@ -18,6 +19,7 @@ int main()
         game.ProcessInput(deltatime);
         game.Update(deltatime);
         game.Render();
+
     }
     return 0;
 }

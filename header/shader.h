@@ -21,7 +21,8 @@ class Shader
 {
 public:
     Shader(const std::string& vertPath, const std::string& fragPath, const std::string& geometryPath="");
-    void Use();
+    ~Shader();
+    Shader& Use();
     void Delete();
     void Unbind();
     void SetInt(const std::string& name, GLint value);

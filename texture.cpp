@@ -37,6 +37,11 @@ void Texture::Delete()
     glDeleteTextures(1, &m_ID);
 }
 
+Texture::~Texture()
+{
+    Delete();
+}
+
 Texture::Texture(Texture&& other) noexcept :m_ID(other.m_ID), m_width(other.m_width), m_height(other.m_height),
       m_format(other.m_format), m_internalFormat(other.m_internalFormat),  // Add this
       m_wrapS(other.m_wrapS), m_wrapT(other.m_wrapT),

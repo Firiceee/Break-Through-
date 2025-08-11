@@ -1,18 +1,15 @@
 #include "header/resource_manager.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "header/stb_image.h"
 
 std::map<std::string, Shader> ResourceManager::s_shaders;
 std::map<std::string, Texture> ResourceManager::s_textures;
 
 void ResourceManager::Clear()
 {
-    for (auto& pair : s_textures )
-    {
-        ResourceManager::GetTexture(pair.first).Delete();
-    }
-    for (auto& pair : s_shaders )
-    {
-        ResourceManager::GetShader(pair.first).Delete();
-    }
+    // Clear the maps - destructors will handle OpenGL cleanup
+    s_textures.clear();
+    s_shaders.clear();
 }
 
 Shader& ResourceManager::GetShader(const std::string& name)
