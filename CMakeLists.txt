@@ -75,6 +75,9 @@ set(SOURCES
         main.cpp
         shader.cpp
         texture.cpp
+        game.cpp
+        resource_manager.cpp
+        windowmanager.cpp
 )
 
 add_executable(breakThrough ${SOURCES})

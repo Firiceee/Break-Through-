@@ -1,5 +1,7 @@
 #include "header/resource_manager.h"
 
+std::map<std::string, Shader> ResourceManager::s_shaders;
+std::map<std::string, Texture> ResourceManager::s_textures;
 
 void ResourceManager::Clear()
 {

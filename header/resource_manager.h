@@ -2,8 +2,8 @@
 #define RESOURCEMANAGER_H
 #include <map>
 #include <string_view>
-#include "header/shader.h"
-#include "header/texture.h"
+#include "shader.h"
+#include "texture.h"
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
