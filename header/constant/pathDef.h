@@ -1,5 +1,6 @@
 #ifndef PATHDEF_H
 #define PATHDEF_H
+
 namespace Constant{
     namespace Path
     {
@@ -9,9 +10,13 @@ namespace Constant{
         // Texture paths
         constexpr const char* BLOCK_TEXTURE = "resources/texture/block.png";
         constexpr const char* BLOCK_SOLID_TEXTURE = "resources/texture/block_solid.png";
-        
+        constexpr const char* BACKGROUND = "resources/texture/background.jpg";
+        constexpr const char* PLAYER = "resources/texture/paddle.png";
+        constexpr const char* BALL = "resources/texture/ball2.png";
+
         // Level paths
         constexpr const char* LEVEL_1 = "resources/level/level1.txt";
     }
 }
+
 #endif

@@ -6,10 +6,32 @@ static SizeCallback g_sizeCallback = nullptr;
 
 void callBackSize(GLFWwindow* window, int width, int height)
 {
+    // Query actual framebuffer size
     glfwGetFramebufferSize(window, &width, &height);
-    glViewport(0, 0, width, height);
-    
-    // Call the registered callback if available
+
+    // Compute letterboxed viewport based on virtual resolution
+    const float virtualAspect = static_cast<float>(Constant::Screen::WIDTH) /
+                                static_cast<float>(Constant::Screen::HEIGHT);
+    const float windowAspect = static_cast<float>(width) / static_cast<float>(height);
+
+    int vpW, vpH, vpX, vpY;
+    if (windowAspect > virtualAspect) {
+        // Window is wider than virtual aspect → fit by height
+        vpH = height;
+        vpW = static_cast<int>(height * virtualAspect);
+        vpX = (width - vpW) / 2;
+        vpY = 0;
+    } else {
+        // Window is taller/narrower → fit by width
+        vpW = width;
+        vpH = static_cast<int>(width / virtualAspect);
+        vpX = 0;
+        vpY = (height - vpH) / 2;
+    }
+
+    glViewport(vpX, vpY, vpW, vpH);
+
+    // Notify optional listeners
     if (g_sizeCallback) {
         g_sizeCallback(width, height);
     }
@@ -41,6 +63,9 @@ WindowManager::WindowManager()
     glfwSetFramebufferSizeCallback(m_window, callBackSize);
     m_height = currHeight;
     m_width = currWidth;
+
+    // Initialize viewport with correct letterboxing
+    callBackSize(m_window, currWidth, currHeight);
 }
 
 WindowManager::~WindowManager()

@@ -17,7 +17,7 @@ int main()
         deltatime = static_cast<float>(glfwGetTime()) - timer;
         timer = static_cast<float>(glfwGetTime());
         game.ProcessInput(deltatime);
-        game.Update(deltatime);
+        game.Update(deltatime, timer);
         game.Render();
 
     }

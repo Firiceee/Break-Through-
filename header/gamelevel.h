@@ -11,6 +11,7 @@ public:
     void Draw(SpriteRenderer& renderer);
     GameLevel(const char* filePath, int width, int height);
     bool IsCompleted();
+    std::vector<GameObject>& getBricks() { return m_bricks;}
 private:
     std::vector<GameObject> m_bricks;
     std::vector<std::vector<int>> parseFile(const char* filePath);

@@ -7,15 +7,21 @@
 #include "texture.h"
 
 class GameLevel;
+class Game;
+class Ball;
 
 class GameObject
 {
 public:
+    virtual ~GameObject() = default;
     GameObject() = default;
     GameObject(glm::vec2 position, glm::vec2 size, Texture* sprite,
         glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
     // draw sprite
     virtual void Draw(SpriteRenderer& renderer);
+    void changeVelocity(glm::vec2& newVelocity);
+    void moove(float deltaTime);
+    glm::vec2 getSpeed(){ return m_velocity;}
 
 private:
     bool m_IsSolid{};
@@ -28,6 +34,8 @@ private:
     bool m_destroyed{};
 
     friend GameLevel;
+    friend Ball;
+    friend Game;
 };
 
 #endif

@@ -81,6 +81,7 @@ set(SOURCES
         spriteRenderer.cpp
         gameobject.cpp
         gamelevel.cpp
+        ball.cpp
 )
 
 add_executable(breakThrough ${SOURCES})
