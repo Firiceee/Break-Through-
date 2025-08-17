@@ -6,6 +6,7 @@
 #include "spriteRenderer.h"
 #include "ball.h"
 #include "shader.h"
+#include "particuleGenerator.h"
 #include <glad/glad.h>
 #include <vector>
 
@@ -35,6 +36,7 @@ private:
     GameState m_state{GameState::GAME_ACTIVE};
     GameObject m_player{};
     Ball m_ball{};
+    ParticuleGenerator m_particles{};
     int m_width{};
     int m_height{};
     std::vector<GameLevel> m_levels;

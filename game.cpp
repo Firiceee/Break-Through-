@@ -42,6 +42,9 @@ void Game::Render()
         m_levels[m_currentLevel - 1].Draw(*Renderer);
         m_player.Draw(*Renderer);
         m_ball.Draw(*Renderer);
+        
+        // Draw particles with their own shader
+        m_particles.Draw(ResourceManager::GetShader(Constant::Resource::PARTICLE_SHADER));
     }
     glfwSwapBuffers(windowManager.getWindow());
     glfwPollEvents();
@@ -61,6 +64,9 @@ void Game::Update(GLfloat deltaTime, float time)
         }
         m_ball.normaliseSpeed();
         m_ball.moove(deltaTime);
+        
+        // Update particles at ball position
+        m_particles.Update(deltaTime, m_ball.m_position);
     }
 }
 Game::~Game()
@@ -86,6 +92,12 @@ void Game::Init()
     
     // load shaders
     ResourceManager::LoadShader(Constant::Path::DEF_VERT, Constant::Path::DEF_FRAG, "", Constant::Resource::SPRITE_SHADER);
+    ResourceManager::LoadShader(Constant::Path::PART_VERT, Constant::Path::PART_FRAG, "", Constant::Resource::PARTICLE_SHADER);
+    
+    // Enable OpenGL blending for alpha transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
     // configure shaders with virtual resolution that stays constant during a level
     glm::mat4 projection = glm::ortho(0.0f,
                                       static_cast<float>(Constant::Screen::WIDTH),
@@ -94,6 +106,10 @@ void Game::Init()
 
     ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER).Use().SetInt(Constant::Resource::TEX_UNIFORM, 0);
     ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER).SetMat4(Constant::Resource::PROJECTION_UNIFORM, projection);
+    
+    // Configure particle shader
+    ResourceManager::GetShader(Constant::Resource::PARTICLE_SHADER).Use().SetInt(Constant::Resource::TEX_UNIFORM, 0);
+    ResourceManager::GetShader(Constant::Resource::PARTICLE_SHADER).SetMat4(Constant::Resource::PROJECTION_UNIFORM, projection);
     // set render-specific controls
     Renderer = new SpriteRenderer(ResourceManager::GetShader(Constant::Resource::SPRITE_SHADER));
     Renderer->initRenderData();
@@ -117,6 +133,9 @@ void Game::Init()
 
     ResourceManager::LoadTexture(Constant::Path::BALL, true, GL_REPEAT, GL_REPEAT,
     GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, Constant::Resource::BALL);
+
+    ResourceManager::LoadTexture("resources/texture/particle.png", true, GL_REPEAT, GL_REPEAT,
+    GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, Constant::Resource::PARTICLE);
 
     // Build level using the same virtual resolution
     m_levels.emplace_back(Constant::Path::LEVEL_1,
