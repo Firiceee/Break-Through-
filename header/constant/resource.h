@@ -5,6 +5,7 @@ namespace Constant{
     {
         // Shader names
         constexpr const char* SPRITE_SHADER = "sprite";
+        constexpr const char* PARTICLE_SHADER = "particle";
         
         // Texture names
         constexpr const char* BRICK_TEXTURE = "brick";
@@ -12,6 +13,7 @@ namespace Constant{
         constexpr const char* BACKGROUND = "background";
         constexpr const char* PLAYER = "player";
         constexpr const char* BALL = "ball";
+        constexpr const char* PARTICLE = "particle";
 
 
 

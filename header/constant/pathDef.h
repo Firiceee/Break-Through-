@@ -6,6 +6,8 @@ namespace Constant{
     {
         constexpr const char* DEF_FRAG = "resources/shader/def.frag";
         constexpr const char* DEF_VERT = "resources/shader/def.vert";
+        constexpr const char* PART_FRAG = "resources/shader/part.frag";
+        constexpr const char* PART_VERT = "resources/shader/part.vert";
         
         // Texture paths
         constexpr const char* BLOCK_TEXTURE = "resources/texture/block.png";
